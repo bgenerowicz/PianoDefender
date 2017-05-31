@@ -5,15 +5,15 @@ import wave
 import numpy as np
 import detect_note
 import plot_data
-from scipy import signal
+import find_note
+from scipy import signal, stats
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
 CHANNELS = 2
 RATE = 44100
-RECORD_SECONDS = 1
-WAVE_OUTPUT_FILENAME = "output.wav"
-treshhold = 1e2
+RECORD_SECONDS = 2
+treshhold = 1e3
 
 class Threading(object):
     """ Threading example class
@@ -49,6 +49,9 @@ class Threading(object):
             for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):  # Record Data in frames as byte list
                 data = stream.read(CHUNK)
                 frames.append(data)
+            stream.stop_stream()  # Close
+            stream.close()
+            p.terminate()
             decoded = np.fromstring(np.asarray(frames), np.int16);  # Convert to int array
 
             # data = wave.open('output.wav')
@@ -56,20 +59,29 @@ class Threading(object):
             # decoded = np.fromstring(data, np.int16);
 
             Data = 1 / len(decoded) * np.absolute(np.fft.fft(decoded)) ** 2  # PSD of data
-            Data = Data[0:600]  # Truncate to important frequencies
+            Data = Data[0:4000:2]  # Truncate to important frequencies
+            Data_norm = Data / np.amax(Data)  # Truncate to important frequencies
 
             # plot_data.plot_data(Data)  # Make plot
 
-            fnote = 0
-            if np.amax(Data) > treshhold:  # If amplitude above a certain threshhold -> detect the note
-                fnote, nnote = detect_note.detect_note(Data)
+
+            kurt = stats.kurtosis(Data_norm)
+            if kurt > 700:
+                played_note = find_note.find_note(Data_norm)
+                print('played note: ' + played_note)
+                self.note = played_note
+            else:
+                self.note = 'none'
+            # if np.amax(Data) > treshhold:  # If amplitude above a certain threshhold -> detect the note
+            #     played_note = find_note.find_note(Data_norm)
+            #     print('played note: ' + played_note)
 
             # print('Note frequency is: ' + str(fnote) + '\t Which is a ' + nnote)
-            self.note = nnote
-            stream.stop_stream()  # Close
-            stream.close()
-            p.terminate()
-            time.sleep(self.interval)
+
+
+            # time.sleep(self.interval)
+
+
 
 example = Threading()
 

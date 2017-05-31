@@ -13,7 +13,7 @@ pygame.init()
 #Variables
 speed = 2               #Set speed of moving notes
 x_vline = 100           #Set where end point is
-speed_repeat = 10      #Set repeat speed
+speed_repeat = 50      #Set repeat speed
 
 #Load images
 screen = pygame.display.set_mode((640, 213))
@@ -37,7 +37,7 @@ while 1:
         # print('count: ' + str(count))
 
         picked_height = random.choice(list(heights.keys())) #Make random note
-        o = note.note(note_image, picked_height, speed)
+        o = note.note(note_image, picked_height, speed) # TODO remove speed?
         notes.append(o)
         # print('Note: ' + str(heights[picked_height]))
 
@@ -61,7 +61,7 @@ while 1:
     # if (count % 100) == 0:
     #     recorded_note = input("Please enter something: ")
     #
-    print('rec: ' + recorded_note)
+    # print('rec: ' + recorded_note)
 
 
     if len(notes) > 0:
