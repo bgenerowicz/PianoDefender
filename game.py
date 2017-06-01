@@ -23,7 +23,6 @@ vline_image = pygame.image.load('images/vline.png').convert_alpha()
 
 #Init
 screen.blit(background, (0, 0))
-screen.blit(vline_image, (x_vline, 0))
 notes = []
 heights = {78: 'D4', 65: 'E4',52: 'F4',38: 'G4',24: 'A4',10: 'B4'}
 count = 0

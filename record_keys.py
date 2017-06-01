@@ -43,7 +43,6 @@ Data = 1 / len(decoded) * np.absolute(np.fft.fft(decoded)) ** 2  # PSD of data
 Data = Data[0:4000:2]  # Truncate to important frequencies
 Data_norm = Data / np.amax(Data)
 
-# plot_data.plot_data(Data_norm) # Make Plot
 
 
 
@@ -54,6 +53,12 @@ if kurt > 500:
     print('played note: ' + played_note)
 else:
     print('no note')
+
+
+fig1 = plt.figure()
+ax1 = fig1.add_subplot(111)
+ax1.plot(Data_norm) # Make Plot
+
 
 # np.save('keys/'+key,Data_norm)
 # t1 = np.load('keys/C4.npy')
