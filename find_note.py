@@ -51,5 +51,4 @@ def find_note(Data):
     return note
 
 
-# print(find_note(t1))
 end = 1

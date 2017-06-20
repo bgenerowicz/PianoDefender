@@ -2,12 +2,10 @@ import pygame
 import sys
 import note
 import random
-import record_note
+import threading_recording
 from pygame.locals import *
 
 pygame.init()
-
-
 
 
 #Variables
@@ -27,7 +25,7 @@ notes = []
 heights = {78: 'D4', 65: 'E4',52: 'F4',38: 'G4',24: 'A4',10: 'B4'}
 count = 0
 
-rec = record_note.Threading()  #activate threaded recording
+rec = threading_recording.Threading()  #activate threaded recording
 recorded_note = 'none'
 
 while 1:
@@ -55,12 +53,8 @@ while 1:
             print('Game Over')
             sys.exit()
 
-    # recorded_note = 'none'
-    recorded_note = rec.note
-    # if (count % 100) == 0:
-    #     recorded_note = input("Please enter something: ")
-    #
-    # print('rec: ' + recorded_note)
+    recorded_note = rec.note #take current note from thread
+
 
 
     if len(notes) > 0:
@@ -68,20 +62,13 @@ while 1:
         if current_note == recorded_note:
             print('done')
             del notes[0]
+            pygame.time.delay(500)
             current_note = 'none'
+
 
     end = 1
 
-
-
-
-
-
-    # print(current_note)
-
-
-
-
+    #Update
     pygame.display.update()
     pygame.time.delay(100)
     count = count + 1

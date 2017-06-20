@@ -5,16 +5,15 @@ import matplotlib.pyplot as plt
 import find_note
 from scipy import signal, stats
 
-key = 'whatever'
+key = 'guitar-e'
 
 
 
-CHUNK = 1024
+CHUNK = 512
 FORMAT = pyaudio.paInt16
-CHANNELS = 2
-RATE = 44100
+CHANNELS = 1
+RATE = 32000
 RECORD_SECONDS = 2
-treshhold = 1e3
 
 
 
@@ -29,7 +28,7 @@ frames = []
 print("Recording, play " + key)
 
 for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):  # Record Data in frames as byte list
-    data = stream.read(CHUNK)
+    data = stream.read(CHUNK, exception_on_overflow=False)
     frames.append(data)
 
 stream.stop_stream()  # Close
@@ -60,7 +59,7 @@ ax1 = fig1.add_subplot(111)
 ax1.plot(Data_norm) # Make Plot
 
 
-# np.save('keys/'+key,Data_norm)
+np.save('keys/'+key,Data_norm)
 # t1 = np.load('keys/C4.npy')
 # t2 = np.load('keys/C4v2.npy')
 # t3 = np.load('keys/C4v3.npy')
